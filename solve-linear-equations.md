@@ -9,11 +9,7 @@ output:
   bookdown::pdf_document2: default
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, error = TRUE)
-library(ggplot2)
-theme_set(theme_light()) # set theme for all plots
-```
+
 
 # Intersection of two (straight) lines
 
@@ -90,8 +86,8 @@ Then,
 
 Therefore, the point of intersection is $x = \frac{d -c}{a-b}$ and $y = \frac{ad - bc}{a-b}$ or $y=a{\frac {d-c}{a-b}}+c$ by \@ref(eq:eq1).
 
-```{r, define function}
 
+```r
 # Given equations of the two lines as: 
 # y = ax+c
 # y = bx+d
@@ -113,15 +109,12 @@ lines_intersect <- function(a, c, b, d) {
     rev(sol) # solution as (x, y)
     }
 }
-
-
-
 ```
 
 Note if $a = b$ it means the two lines are parallel, hence no intersection. If $c \ne d$ as well, the lines are different and there is no intersection, otherwise the two lines are identical.
 
-```{r, fig.cap = 'Intersection of Two Lines: when $a \\ne b$'}
 
+```r
 plot_intersection = function(a, c, b, d, xlim = c(-10, 10), gg) {
 
 f1 <- function(x) a * x + c
@@ -158,8 +151,8 @@ Let's try to answer a question asked on [twitter](# https://twitter.com/PaoloAPa
 )
 
 
-```{r, params}
 
+```r
 eqns <- list(
   main.fun = function(x) abs(2 * x) + 4,
   A = function(x) x - 2,
@@ -171,10 +164,10 @@ eqns <- list(
 
 params = data.frame(slope = c(1, 1, 2, 2, 3), 
                     yintercept = c(-2, 3, -2, 3, -2))
-
 ```
 
-```{r, plotting}
+
+```r
 pp = ggplot() + 
   geom_function(fun = eqns$main.fun) + 
   lims(x = c(-20, 20))
@@ -183,19 +176,75 @@ pp +
   lapply(eqns[-1], function(f) geom_function(fun = f))
 ```
 
+![](solve-linear-equations_files/figure-html/plotting-1.png)<!-- -->
 
-```{r, solution}
 
+
+```r
 # solution
 Map(lines_intersect, 
 a = 2, c = 4, 
 b = params$slope, 
 d = params$yintercept) # case 1: y = 2x + 4, if x>0
+```
 
+```
+## system is exactly singular: det A = 0
+```
+
+```
+## no intersection
+```
+
+```
+## system is exactly singular: det A = 0
+```
+
+```
+## no intersection
+```
+
+```
+## [[1]]
+## [1] -6 -8
+## 
+## [[2]]
+## [1] -1  2
+## 
+## [[3]]
+## NULL
+## 
+## [[4]]
+## NULL
+## 
+## [[5]]
+## [1]  6 16
+```
+
+```r
 Map(lines_intersect, a = -2, c = 4, 
 b = params$slope, 
 d = params$yintercept) # case 2: y = -2x=4, if x<0
+```
 
+```
+## [[1]]
+## [1] 2 0
+## 
+## [[2]]
+## [1] 0.3333333 3.3333333
+## 
+## [[3]]
+## [1] 1.5 1.0
+## 
+## [[4]]
+## [1] 0.25 3.50
+## 
+## [[5]]
+## [1] 1.2 1.6
+```
+
+```r
 # main equation: y = abs(2*x) + 4
 ## case 1
 a = 2; c = 4
@@ -205,27 +254,83 @@ a. = -2; c. = 4
 # choice A -> y = x-2
 b = 1; d = -2 
 plot_intersection(a, c, b, d, gg = pp)
-plot_intersection(a., c., b, d, gg = pp)
+```
 
+![](solve-linear-equations_files/figure-html/solution-1.png)<!-- -->
+
+```r
+plot_intersection(a., c., b, d, gg = pp)
+```
+
+![](solve-linear-equations_files/figure-html/solution-2.png)<!-- -->
+
+```r
 # choice B -> y = x + 3
 b = 1; d = 3  
 plot_intersection(a, c, b, d, gg = pp)
-plot_intersection(a., c., b, d, gg = pp)
+```
 
+![](solve-linear-equations_files/figure-html/solution-3.png)<!-- -->
+
+```r
+plot_intersection(a., c., b, d, gg = pp)
+```
+
+![](solve-linear-equations_files/figure-html/solution-4.png)<!-- -->
+
+```r
 # C -> y = 2 * x - 2
 b = 2; d = -2 
 plot_intersection(a, c, b, d, gg = pp)
-plot_intersection(a., c., b, d, gg = pp)
+```
 
+```
+## system is exactly singular: det A = 0
+## no intersection
+```
+
+```
+## Error in round(p, 2): non-numeric argument to mathematical function
+```
+
+```r
+plot_intersection(a., c., b, d, gg = pp)
+```
+
+![](solve-linear-equations_files/figure-html/solution-5.png)<!-- -->
+
+```r
 # D -> y = 2 * x + 3
 b = 2; d = 3   
 plot_intersection(a, c, b, d, gg = pp)
-plot_intersection(a., c., b, d, gg = pp)
+```
 
+```
+## system is exactly singular: det A = 0
+## no intersection
+```
+
+```
+## Error in round(p, 2): non-numeric argument to mathematical function
+```
+
+```r
+plot_intersection(a., c., b, d, gg = pp)
+```
+
+![](solve-linear-equations_files/figure-html/solution-6.png)<!-- -->
+
+```r
 # E y = 3 * x - 2 
 b = 3; d = -2  
 plot_intersection(a, c, b, d, gg = pp)
-plot_intersection(a., c., b, d, gg = pp)
-
 ```
+
+![](solve-linear-equations_files/figure-html/solution-7.png)<!-- -->
+
+```r
+plot_intersection(a., c., b, d, gg = pp)
+```
+
+![](solve-linear-equations_files/figure-html/solution-8.png)<!-- -->
 
