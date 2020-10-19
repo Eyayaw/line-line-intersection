@@ -3,14 +3,13 @@ title: "Finding intersection point of two lines"
 author: "Eyayaw Beze"
 date: "10/17/2020"
 output:
-  bookdown::html_document2:
-    theme: flatly
-    keep_md: yes
+  bookdown::markdown_document2:
+    variant: markdown_github
   bookdown::pdf_document2: default
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 theme_set(theme_light()) # set theme for all plots
 ```
@@ -90,31 +89,9 @@ Then,
 
 Therefore, the point of intersection is $x = \frac{d -c}{a-b}$ and $y = \frac{ad - bc}{a-b}$ or $y=a{\frac {d-c}{a-b}}+c$ by \@ref(eq:eq1).
 
-```{r, define function}
-
-# Given equations of the two lines as: 
-# y = ax+c
-# y = bx+d
- 
-lines_intersect <- function(a, c, b, d) {
-  # A %*% X = D
-  # where A is a 2x2 coefficient matrix
-  # X = a 2x1 variable vector
-  # a 2x1 constant vector
-  if (a==b) {
-    message("system is exactly singular: det A = 0")
-    message("no intersection")
-    return(NULL)
-    }
-  else { 
-    A <- matrix(c(1, -a, 1, -b), nrow = 2, ncol = 2, byrow = TRUE)
-    D <- matrix(c(c, d), nrow = 2, ncol = 1, byrow = TRUE)
-    sol <- solve(A, D) # (y, x)
-    rev(sol) # solution as (x, y)
-    }
-}
-
-
+```{r, source functions}
+source("intersection.R")
+source("plot_intersection.R")
 
 ```
 
@@ -122,36 +99,7 @@ Note if $a = b$ it means the two lines are parallel, hence no intersection. If $
 
 ```{r, fig.cap = 'Intersection of Two Lines: when $a \\ne b$'}
 
-plot_intersection = function(a, c, b, d, xlim = c(-10, 10), gg) {
-
-f1 <- function(x) a * x + c
-f2 <- function(x) b * x + d
-xll <- xlim[[1]]  # x-axis lower limit
-xul <- xlim[[2]]  # x-axis upper limit
-yll <- min(f1(xll), f2(xll), f1(xul), f2(xul)) # y-axis lower limit
-yul <- max(f1(xll), f2(xll), f1(xul), f2(xul)) # y-axis upper limit
-
-# create equation labels
-equ_label <- function() {
-    slope = c(a, b)
-    paste0("y = ", ifelse(slope == 1, "", slope), "x + ", c(c, d))
-}
-labs = equ_label()
-p = lines_intersect(a, c, b, d) # point of intersection
-lab.p = paste0("(", paste(round(p, 2), collapse = ", "), ")")
-
-if (missing(gg)) gg = ggplot() 
-
-gg +
-  geom_function(fun = f1, col = "red") +
-  geom_label(aes(x = xul/2, y = f1(xul/2), label = labs[1]), col = "red") +
-  geom_function(fun = f2, col = "blue") +
-  geom_label(aes(x = -xul/2, y = f2(-xul/2), label = labs[2]), col = "blue") +
-  geom_point(aes(x = p[1], y = p[2])) +
-  geom_label(aes(x = p[1], y=p[2]), label = lab.p) + 
-  #lims(x = c(xll, xul), y = c(yll, yul)) + 
-  labs(x = "x", y = "y")
-}
+plot_intersection(2, 1, 1, 2)
 ```
 
 Let's try to answer a question asked on [twitter](# https://twitter.com/PaoloAPalma/status/1317336137996881927?s=20
@@ -180,7 +128,7 @@ pp = ggplot() +
   lims(x = c(-20, 20))
 
 pp + 
-  lapply(eqns[-1], function(f) geom_function(fun = f))
+  lapply(1:5, function(i) geom_function(fun = eqns[-1][[i]], col = i))
 ```
 
 
