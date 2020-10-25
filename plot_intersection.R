@@ -7,11 +7,11 @@ plot_intersection <- function(a, c, b, d, xlim=c(-20, 20), gg) {
   yul <- max(f1(xll), f2(xll), f1(xul), f2(xul)) # y-axis upper limit
 
   # create equation labels
-  equ_label <- function() {
+  equ_label <- function(a, b) {
     slope <- c(a, b)
     paste0("y = ", ifelse(slope == 1, "", slope), "x + ", c(c, d))
   }
-  labs <- equ_label()
+  labs <- equ_label(a, b)
 
   if (missing(gg)) gg <- ggplot()
 
