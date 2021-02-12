@@ -3,8 +3,9 @@ title: "Finding intersection point of two lines"
 author: "Eyayaw Beze"
 date: "10/17/2020"
 output:
-  bookdown::markdown_document2:
+  bookdown::html_document2:
     variant: markdown_github
+    theme: flatly
   bookdown::pdf_document2: default
 ---
 

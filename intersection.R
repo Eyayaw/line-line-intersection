@@ -16,6 +16,10 @@ lines_intersect <- function(a, c, b, d) {
     A <- matrix(c(1, -a, 1, -b), nrow = 2, ncol = 2, byrow = TRUE)
     D <- matrix(c(c, d), nrow = 2, ncol = 1, byrow = TRUE)
     sol <- solve(A, D) # (y, x)
-    rev(sol) # solution as (x, y)
+    rev(sol) # bring x first (x, y)
   }
+}
+
+slope <- function(x, y) {
+  (y[[2]] - y[[1]]) / (x[[2]] - x[[1]])
 }
