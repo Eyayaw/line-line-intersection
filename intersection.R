@@ -23,3 +23,17 @@ lines_intersect <- function(a, c, b, d) {
 slope <- function(x, y) {
   (y[[2]] - y[[1]]) / (x[[2]] - x[[1]])
 }
+
+equation <- function(x, y, env=parent.frame()) {
+  m = (y[[2]] - y[[1]]) / (x[[2]] - x[[1]])
+  part = m*x[[1]] + y[[1]]
+  eval(call("function", as.pairlist(alist(x = )),
+            bquote({.(m) * (x) - .(part)})), env)
+}
+
+equation2 <- function(x0, y0, m, env = parent.frame()) {
+  part = m*x0 + y0
+  eval(call("function",
+            as.pairlist(alist(x = )),
+            bquote(.(m) * (x) - .(part))), env)
+}
